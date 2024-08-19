@@ -8,27 +8,36 @@ import fileUpload from "express-fileupload";
 import userRouter from "./router/userRouter.js";
 import jobRouter from "./router/jobRouter.js";
 
+import applicationRouter from "./router/applicationRouter.js";
+
+
 
 const app = express();
-
 config({ path: "./config/config.env" });
 
-app.use(cors({
-  origin: [process.env.FRONTEND_URL],
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  credentials: true,
-}));
+app.use(
+  cors({
+    origin: [process.env.FRONTEND_URL],
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+  })
+);
 
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(fileUpload({
-  useTempFiles: true,
-  tempFileDir: "/tmp/"
-}));
+
+app.use(
+  fileUpload({
+    useTempFiles: true,
+    tempFileDir: "/tmp/",
+  })
+);
 
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/job", jobRouter);
+app.use("/api/v1/application", applicationRouter);
+
 
 connection();
 app.use(errorMiddleware);
