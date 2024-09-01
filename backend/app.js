@@ -9,6 +9,7 @@ import userRouter from "./router/userRouter.js";
 import jobRouter from "./router/jobRouter.js";
 
 import applicationRouter from "./router/applicationRouter.js";
+import { newsLetterCron } from "./automation/newsLetterCron.js";
 
 
 
@@ -38,7 +39,7 @@ app.use("/api/v1/user", userRouter);
 app.use("/api/v1/job", jobRouter);
 app.use("/api/v1/application", applicationRouter);
 
-
+newsLetterCron()
 connection();
 app.use(errorMiddleware);
 
