@@ -11,7 +11,7 @@ const userSlice = createSlice({
     message: null,
   },
   reducers: {
-    registerRequest(state) {
+    registerRequest(state, action) {
       state.loading = true;
       state.isAuthenticated = false;
       state.user = {};
@@ -29,10 +29,10 @@ const userSlice = createSlice({
       state.loading = false;
       state.isAuthenticated = false;
       state.user = {};
-      state.error = action.payload || "Registration failed";
+      state.error = action.payload;
       state.message = null;
     },
-    loginRequest(state) {
+    loginRequest(state, action) {
       state.loading = true;
       state.isAuthenticated = false;
       state.user = {};
@@ -50,10 +50,10 @@ const userSlice = createSlice({
       state.loading = false;
       state.isAuthenticated = false;
       state.user = {};
-      state.error = action.payload || "Login failed";
+      state.error = action.payload;
       state.message = null;
     },
-    fetchUserRequest(state) {
+    fetchUserRequest(state, action) {
       state.loading = true;
       state.isAuthenticated = false;
       state.user = {};
@@ -69,18 +69,21 @@ const userSlice = createSlice({
       state.loading = false;
       state.isAuthenticated = false;
       state.user = {};
-      state.error = action.payload || "Failed to fetch user";
+      state.error = action.payload;
     },
-    logoutSuccess(state) {
+    logoutSuccess(state, action) {
       state.isAuthenticated = false;
       state.user = {};
       state.error = null;
     },
     logoutFailed(state, action) {
-      state.error = action.payload || "Logout failed";
+      state.isAuthenticated = state.isAuthenticated;
+      state.user = state.user;
+      state.error = action.payload;
     },
-    clearAllErrors(state) {
+    clearAllErrors(state, action) {
       state.error = null;
+      state.user = state.user;
     },
   },
 });
@@ -89,7 +92,7 @@ export const register = (data) => async (dispatch) => {
   dispatch(userSlice.actions.registerRequest());
   try {
     const response = await axios.post(
-      `${import.meta.env.VITE_REACT_APP_BACKEND_URL}/api/v1/user/register`,
+      "http://localhost:4000/api/v1/user/register",
       data,
       {
         withCredentials: true,
@@ -97,8 +100,9 @@ export const register = (data) => async (dispatch) => {
       }
     );
     dispatch(userSlice.actions.registerSuccess(response.data));
+    dispatch(userSlice.actions.clearAllErrors());
   } catch (error) {
-    dispatch(userSlice.actions.registerFailed(error.response?.data?.message));
+    dispatch(userSlice.actions.registerFailed(error.response.data.message));
   }
 };
 
@@ -106,7 +110,7 @@ export const login = (data) => async (dispatch) => {
   dispatch(userSlice.actions.loginRequest());
   try {
     const response = await axios.post(
-      `${import.meta.env.VITE_REACT_APP_BACKEND_URL}/api/v1/user/login`,
+      "http://localhost:4000/api/v1/user/login",
       data,
       {
         withCredentials: true,
@@ -114,8 +118,9 @@ export const login = (data) => async (dispatch) => {
       }
     );
     dispatch(userSlice.actions.loginSuccess(response.data));
+    dispatch(userSlice.actions.clearAllErrors());
   } catch (error) {
-    dispatch(userSlice.actions.loginFailed(error.response?.data?.message));
+    dispatch(userSlice.actions.loginFailed(error.response.data.message));
   }
 };
 
@@ -123,28 +128,29 @@ export const getUser = () => async (dispatch) => {
   dispatch(userSlice.actions.fetchUserRequest());
   try {
     const response = await axios.get(
-      `${import.meta.env.VITE_REACT_APP_BACKEND_URL}/api/v1/user/getuser`,
+      "http://localhost:4000/api/v1/user/getuser",
       {
         withCredentials: true,
       }
     );
     dispatch(userSlice.actions.fetchUserSuccess(response.data.user));
+    dispatch(userSlice.actions.clearAllErrors());
   } catch (error) {
-    dispatch(userSlice.actions.fetchUserFailed(error.response?.data?.message));
+    dispatch(userSlice.actions.fetchUserFailed(error.response.data.message));
   }
 };
-
 export const logout = () => async (dispatch) => {
   try {
-    await axios.get(
-      `${import.meta.env.VITE_REACT_APP_BACKEND_URL}/api/v1/user/logout`,
+    const response = await axios.get(
+      "http://localhost:4000/api/v1/user/logout",
       {
         withCredentials: true,
       }
     );
     dispatch(userSlice.actions.logoutSuccess());
+    dispatch(userSlice.actions.clearAllErrors());
   } catch (error) {
-    dispatch(userSlice.actions.logoutFailed(error.response?.data?.message));
+    dispatch(userSlice.actions.logoutFailed(error.response.data.message));
   }
 };
 
