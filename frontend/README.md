@@ -4,13 +4,23 @@ A brief description of your project.
 
 ## Table of Contents
 - [Installation](#installation)
-- [Usage](#usage)
+
 - [Images](#images)
-- [License](#license)
+- [HOSTING](#HOSTING)
+
+## Installation
+To install the project dependencies, run the following command:
+```bash
+npm install
+npm run dev
+```
 
 ## Hosting
 - This project is hosted on AWS EC2 for the backend.
 
 ## Images
-![Instance Image](./aws.jpg)  // Use a relative path instead of an absolute path
+### AWS Instance Image
+![Instance Image](./aws.jpg)
 
+### Running Instance Image
+![Running Instance](./aws2.jpg)  
