@@ -1,6 +1,6 @@
 # Project Title
 
-A brief description of your project.
+Job portal.
 
 ## Table of Contents
 - [Installation](#installation)
