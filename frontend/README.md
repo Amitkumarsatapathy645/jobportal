@@ -12,5 +12,5 @@ A brief description of your project.
 - This project is hosted on AWS EC2 for the backend.
 
 ## Images
-![Instance Image](link_to_your_image.jpg)  {{ edit_1 }}
+![Instance Image](./aws.jpg)  // Use a relative path instead of an absolute path
 
